@@ -38,7 +38,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - run: npm build
+    - run: npm test
 
     # Comment out to run the deploy script when you push to the repository.
     #- run: npm run deploy
