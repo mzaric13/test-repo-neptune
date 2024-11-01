@@ -5,26 +5,26 @@ on:
 
 jobs:
 
-  install-npm:
+  # install-npm:
 
-    runs-on: ubuntu-latest
+  #   runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.x]
+  #   strategy:
+  #     matrix:
+  #       node-version: [18.x]
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Installing node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Installing node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
 
-    - run: npm install
+  #   - run: npm install
 
 
   build:
-    needs: install-npm
+    # needs: install-npm
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,13 +32,21 @@ jobs:
         node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Installing node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - uses: actions/checkout@v2
+      - name: Installing node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - run: npm test
+      - run: npm install
+
+      - uses: actions/checkout@v2
+      - name: Installing node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm test
 
     # Comment out to run the deploy script when you push to the repository.
     #- run: npm run deploy
