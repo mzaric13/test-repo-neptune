@@ -1,22 +1,5 @@
 var data = [
     {
-        id: "42f2ddbb-e2f1-4e10-8aaf-b72a9c0db78f",
-        createdAt: 1698661834289,
-        updatedAt: 1730454859174,
-        createdBy: "admin",
-        updatedBy: "admin",
-        name: "Power Supply",
-        part_number: "PSU123",
-        latitude: 62.35741841,
-        longitude: 47.99473234,
-        checkup_date: "2023-11-01T09:26:39.796Z",
-        days_until_check: -356,
-        assigned_for_checking: false,
-        assigned_to: null,
-        pdf: null,
-        checkup_interval: 10,
-    },
-    {
         id: "f5698387-88c4-4a30-8f8a-e54429f8c5de",
         createdAt: 1698670056182,
         updatedAt: 1730454859184,
