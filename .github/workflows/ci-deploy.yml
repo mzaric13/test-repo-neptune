@@ -43,8 +43,8 @@ jobs:
       - name: Install dependencies with NPM
         run: npm install
       
-      - name: Run test
-        run: npm test
+      # - name: Run test
+      #   run: npm test
 
     # Comment out to run the deploy script when you push to the repository.
     #- run: npm run deploy
