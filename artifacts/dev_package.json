@@ -1,0 +1,61 @@
+{
+	"id": "6fd8e348-ef1f-4dbc-b911-451927ffb80b",
+	"createdAt": "2024-11-01T09:04:17.000Z",
+	"createdBy": "admin",
+	"git": {
+		"remote": "https://github.com/mzaric13/test-repo-neptune.git"
+	},
+	"name": "test_package",
+	"description": null,
+	"ver": "24.11.1.1144",
+	"enableCICD": true,
+	"apps": [
+		{
+			"id": "5dc8b513-ecd0-4ab0-819f-0361e7f31f23",
+			"application": "test_app_github",
+			"title": "",
+			"description": ""
+		}
+	],
+	"api": [],
+	"odataSource": [],
+	"odataMock": [],
+	"dictionary": [],
+	"jsclass": [],
+	"jsscript_group": [],
+	"theme": [],
+	"pdf": [],
+	"rulesengine": [],
+	"reports": [],
+	"api_authentication": [],
+	"api_group": [],
+	"tile": [
+		{
+			"id": "78282ddf-a922-4f7b-9820-f7ac9f6654f0",
+			"description": null,
+			"name": "test_tile"
+		}
+	],
+	"category": [],
+	"launchpad": [
+		{
+			"id": "bbe947cf-ae14-4618-9341-f9dde7d9c8d5",
+			"name": "test_launchpad",
+			"description": null
+		}
+	],
+	"certificates": [],
+	"role": [],
+	"systems": [],
+	"doc": [],
+	"wf_notifications": [],
+	"department": [],
+	"script_scheduler": [],
+	"wf_definition": [],
+	"connector": [],
+	"events": [],
+	"media_library": [],
+	"code_snippets": [],
+	"wf_determination": [],
+	"wf_taskaction": []
+}
