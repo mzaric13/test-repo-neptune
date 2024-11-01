@@ -43,12 +43,8 @@ jobs:
       - name: Install dependencies with NPM
         run: npm install
       
-      # - name: Run test
-      #   run: npm test
-
-    # Comment out to run the deploy script when you push to the repository.
       - name: "Run to staging"
-        run: npm run deploy
+        run: npm deploy
           env:
             DXP_OE_SERVER_URL: ${{ secrets.CDCI_STAGING_URL }}
             DXP_OE_SERVER_TOKEN: ${{ secrets.CDCI_STAGING_TOKEN }}
