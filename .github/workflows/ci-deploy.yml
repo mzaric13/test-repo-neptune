@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  build:
+  install-npm:
 
     runs-on: ubuntu-latest
 
@@ -21,6 +21,25 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - run: npm install
+
+
+  build:
+    depends:
+      - install-npm
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Installing node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: npm build
 
     # Comment out to run the deploy script when you push to the repository.
     #- run: npm run deploy
