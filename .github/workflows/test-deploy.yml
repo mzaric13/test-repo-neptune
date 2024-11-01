@@ -1,0 +1,44 @@
+name: Deploy workflow when adding appart from Neptune
+
+on:
+  push:
+
+jobs:
+
+  # install-npm:
+
+  #   runs-on: ubuntu-latest
+
+  #   strategy:
+  #     matrix:
+  #       node-version: [18.x]
+
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Installing node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+
+  #   - run: npm install
+
+
+  build:
+    # needs: install-npm
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies with NPM
+        run: npm install
