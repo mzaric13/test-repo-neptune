@@ -47,14 +47,16 @@ jobs:
       #   run: npm test
 
     # Comment out to run the deploy script when you push to the repository.
-    #- run: npm run deploy
-    #  env:
-    #    DXP_OE_SERVER_URL: ${{ secrets.CDCI_STAGING_URL }}
-    #    DXP_OE_SERVER_TOKEN: ${{ secrets.CDCI_STAGING_TOKEN }}
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Run to staging"
+        run: npm run deploy
+          env:
+            DXP_OE_SERVER_URL: ${{ secrets.CDCI_STAGING_URL }}
+            DXP_OE_SERVER_TOKEN: ${{ secrets.CDCI_STAGING_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.WORKFLOW_GITHUB_TOKEN }}
 
     # Comment out to run test script after deployment.
     #- run: npm run test
     #  env:
     #    DXP_OE_SERVER_URL: ${{ secrets.CDCI_STAGING_URL }}
     #    DXP_OE_SERVER_TOKEN: ${{ secrets.CDCI_STAGING_TOKEN }}
+
