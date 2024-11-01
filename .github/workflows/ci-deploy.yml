@@ -24,8 +24,7 @@ jobs:
 
 
   build:
-    depends:
-      - install-npm
+    needs: install-npm
     runs-on: ubuntu-latest
 
     strategy:
