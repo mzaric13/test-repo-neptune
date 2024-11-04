@@ -19,7 +19,7 @@ jobs:
           username: ${{ secrets.SSH_STAGING_USERNAME }}
           key: ${{ secrets.SSH_STAGING_PRIVATE_KEY }}
           source: "."
-          target: "."
+          target: "./some-path"
           timeout: 300s
 
   pull-staging:
@@ -37,6 +37,7 @@ jobs:
           key: ${{ secrets.SSH_STAGING_PRIVATE_KEY }}
           script: |
             set -e
+            cd some-path/
             docker logout
             echo ${{secrets.DOCKERHUB_KEY}} | docker login --username ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
             docker compose -f docker-compose.yml down || exit 1
