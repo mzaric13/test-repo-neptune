@@ -410,11 +410,34 @@
 			"fieldNo": 99999,
 			"data": [
 				{
+					"fieldNo": "d4dbd4bf-c304-4054-c38c-b9278c0ab315",
+					"fieldName": "getData",
+					"fieldParent": 99999,
+					"fieldType": "neptune.restapi",
+					"script": "",
+					"customComponent": false,
+					"restSource": "0bf65781-6b26-4763-bbf7-8f6124fe6819",
+					"restOperation": "c240cd98-37ce-4c9a-a11a-edd811543203",
+					"request": [],
+					"response": [],
+					"attributes": [
+						{
+							"attribute": "ajaxSuccess",
+							"grouping": "Events",
+							"value": "modelTable.setData(xhr.responseJSON);",
+							"script": "modelTable.setData(xhr.responseJSON);",
+							"language": "javascript",
+							"translation": []
+						}
+					],
+					"data": []
+				},
+				{
 					"fieldNo": "ef82f07b-7325-469f-d19e-69467b3f1b4a",
 					"fieldName": "onInit",
 					"fieldParent": 99999,
 					"fieldType": "neptune.event.oninit",
-					"script": "file://script/neptune.event.oninit/onInit.js",
+					"script": "apigetData();",
 					"customComponent": false,
 					"request": [],
 					"response": [],
@@ -441,7 +464,7 @@
 		}
 	],
 	"componentInterface": [],
-	"ver": "24.11.4.1121",
+	"ver": "24.11.4.1315",
 	"application": "test_app_github",
 	"title": "",
 	"description": "",
@@ -480,6 +503,12 @@
 	"compilerTarget": 3,
 	"tabWidth": null,
 	"printWidth": null,
-	"apis": [],
+	"apis": [
+		{
+			"id": "0bf65781-6b26-4763-bbf7-8f6124fe6819",
+			"name": "test_internal_api_cicd",
+			"ver": "24.11.4.1314"
+		}
+	],
 	"package": "6fd8e348-ef1f-4dbc-b911-451927ffb80b"
 }

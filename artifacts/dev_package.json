@@ -7,7 +7,7 @@
 	},
 	"name": "test_package",
 	"description": null,
-	"ver": "24.11.4.137",
+	"ver": "24.11.4.1310",
 	"enableCICD": true,
 	"apps": [
 		{
