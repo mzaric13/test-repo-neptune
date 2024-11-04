@@ -91,9 +91,8 @@ services:
     command: ["/bin/sh"]
 
 volumes:
-  postgres-data: {}
-  tenant-db-data: {}
-  pgadmin-data: {}
+  second-instance-db-data: {}
+  first-instance-db-data: {}
 
 networks:
   local_net:
