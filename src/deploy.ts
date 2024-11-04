@@ -74,7 +74,7 @@ async function getPackageFromServer(id: string): Promise<boolean> {
         }
 
         console.log('Package exists on server, importing...');
-        const importResult = await axiosPost(importUrl(serverUrl), {id, branch: 'master', auth: {authType: 1, token: githubToken}, forceUpdate: true});
+        const importResult = await axiosPost(importUrl(serverUrl), {id, branch: 'main', auth: {authType: 1, token: githubToken}, forceUpdate: true});
         console.log('Package has been imported on server');
         const errorLog = importResult.data.importLog.data.filter(entry => entry.transferStatus === 'Error');
         if (errorLog.length > 0) {
