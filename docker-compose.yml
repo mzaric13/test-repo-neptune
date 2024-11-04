@@ -1,39 +1,39 @@
 services:
-  first-instance-db:
-    image: postgres:14.2-alpine
-    container_name: first-instance-db
-    ports:
-      - 5431:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Planet9
-    volumes:
-      - first-instance-db-data:/var/lib/postgresql/data
-      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
-    restart: unless-stopped
-    healthcheck:
-      test: 'pg_isready -U postgres'
-    networks:
-      - local_net
+  # first-instance-db:
+  #   image: postgres:14.2-alpine
+  #   container_name: first-instance-db
+  #   ports:
+  #     - 5431:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: Planet9
+  #   volumes:
+  #     - first-instance-db-data:/var/lib/postgresql/data
+  #     - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: 'pg_isready -U postgres'
+  #   networks:
+  #     - local_net
 
-  second-instance-db:
-    image: postgres:14.2-alpine
-    container_name: second-instance-db
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: Planet9
-    volumes:
-      - second-instance-db-data:/var/lib/postgresql/data
-      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
-    restart: unless-stopped
-    healthcheck:
-      test: 'pg_isready -U postgres'
-    networks:
-      - local_net
+  # second-instance-db:
+  #   image: postgres:14.2-alpine
+  #   container_name: second-instance-db
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: Planet9
+  #   volumes:
+  #     - second-instance-db-data:/var/lib/postgresql/data
+  #     - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+  #   restart: unless-stopped
+  #   healthcheck:
+  #     test: 'pg_isready -U postgres'
+  #   networks:
+  #     - local_net
 
   neptune-first-instance:
     image: neptunesoftware/planet9:v23.10.7
@@ -45,7 +45,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
+          memory: 900M
     networks:
       - local_net
 
@@ -59,7 +59,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
+          memory: 900M
     networks:
       - local_net
 
@@ -85,9 +85,9 @@ services:
     restart: unless-stopped
     command: ["nginx", "-g", "daemon off;"]
 
-volumes:
-  second-instance-db-data: {}
-  first-instance-db-data: {}
+# volumes:
+#   second-instance-db-data: {}
+#   first-instance-db-data: {}
 
 networks:
   local_net:
