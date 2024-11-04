@@ -56,12 +56,5 @@
 	"passwordResetEmail": null,
 	"activationCodeEmail": null,
 	"package": "6fd8e348-ef1f-4dbc-b911-451927ffb80b",
-	"cat": [
-		{
-			"id": "aab4c7ac-5a4a-42d3-a5bb-1e53d2f32955",
-			"name": "TEST_TILE_GROUP",
-			"title": "test",
-			"ver": "24.11.1.1045"
-		}
-	]
+	"cat": []
 }
