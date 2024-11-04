@@ -39,12 +39,6 @@ services:
     image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-first-instance
     environment:
-      DB_TYPE: postgresql
-      DB_PSQL_HOST: first-instance-db
-      DB_PSQL_PORT: 5432
-      DB_PSQL_USER: postgres
-      DB_PSQL_PASSWORD: postgres
-      DB_PSQL_DBNAME: planet9
       PORT: 9101
     depends_on:
       - first-instance-db
@@ -55,12 +49,6 @@ services:
     image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-second-instance
     environment:
-      DB_TYPE: postgresql
-      DB_PSQL_HOST: second-instance-db
-      DB_PSQL_PORT: 5432
-      DB_PSQL_USER: postgres
-      DB_PSQL_PASSWORD: postgres
-      DB_PSQL_DBNAME: planet9
       PORT: 9100
     depends_on:
       - second-instance-db
