@@ -76,8 +76,8 @@ services:
       - /etc/letsencrypt/live/second.smart-watering.xyz/fullchain.pem:/etc/ssl/certs/second/fullchain.pem
       - /etc/letsencrypt/live/second.smart-watering.xyz/privkey.pem:/etc/ssl/private/second/privkey.pem
     depends_on:
-      - first-instance-db
-      - second-instance-db
+      # - first-instance-db
+      # - second-instance-db
       - neptune-first-instance
       - neptune-second-instance
     networks:
