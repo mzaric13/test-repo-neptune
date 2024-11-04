@@ -45,7 +45,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 900M
+          memory: 1G
     networks:
       - local_net
 
@@ -59,7 +59,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 900M
+          memory: 1G
     networks:
       - local_net
 
