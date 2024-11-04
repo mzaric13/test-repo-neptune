@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: planet9
+      POSTGRES_DB: Planet9
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
     restart: unless-stopped
@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: planet9
+      POSTGRES_DB: Planet9
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
     restart: unless-stopped
