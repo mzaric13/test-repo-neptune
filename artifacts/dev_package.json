@@ -7,7 +7,7 @@
 	},
 	"name": "test_package",
 	"description": null,
-	"ver": "24.11.4.135",
+	"ver": "24.11.4.137",
 	"enableCICD": true,
 	"apps": [
 		{
@@ -36,7 +36,13 @@
 			"name": "test_tile"
 		}
 	],
-	"category": [],
+	"category": [
+		{
+			"id": "55359a4c-85fc-47f3-aa0b-f9ae9ca1da48",
+			"description": null,
+			"name": "test_tile_group"
+		}
+	],
 	"launchpad": [
 		{
 			"id": "bbe947cf-ae14-4618-9341-f9dde7d9c8d5",
