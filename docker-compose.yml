@@ -1,0 +1,100 @@
+services:
+  first-instance-db:
+    image: postgres:14.2-alpine
+    container_name: first-instance-db
+    ports:
+      - 5431:5431
+    environment:
+      PGUSER: postgres
+      PGPORT: 5431
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: planet9
+    volumes:
+      - first-instance-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: 'exit 0'
+    networks:
+      - local_net
+
+  second-instance-db:
+    image: postgres:14.2-alpine
+    container_name: second-instance-db
+    ports:
+      - 5432:5432
+    environment:
+      PGUSER: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: second-instance-db
+    volumes:
+      - second-instance-db-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: 'exit 0'
+    networks:
+      - local_net
+
+  neptune-first-instance:
+    image: neptunesoftware/planet9:v23.10.7
+    container_name: neptune-first-instance
+    environment:
+      DB_TYPE: postgresql
+      DB_PSQL_HOST: first-instance-db
+      DB_PSQL_PORT: 5431
+      DB_PSQL_USER: postgres
+      DB_PSQL_PASSWORD: postgres
+      PORT: 9101
+    depends_on:
+      first-instance-db:
+        condition: service_started
+    networks:
+      - local_net
+
+  neptune-second-instance:
+    image: neptunesoftware/planet9:v23.10.7
+    container_name: neptune-second-instance
+    environment:
+      DB_TYPE: postgresql
+      DB_PSQL_HOST: second-instance-db
+      DB_PSQL_PORT: 5432
+      DB_PSQL_USER: postgres
+      DB_PSQL_PASSWORD: postgres
+      PORT: 9100
+    depends_on:
+      second-instance-db:
+        condition: service_started
+    networks:
+      - local_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - /etc/letsencrypt/live/smart-watering.xyz/fullchain.pem:/etc/ssl/certs/fullchain.pem
+      - /etc/letsencrypt/live/smart-watering.xyz/privkey.pem:/etc/ssl/private/privkey.pem
+      - /etc/letsencrypt/live/second.smart-watering.xyz/fullchain.pem:/etc/ssl/certs/second/fullchain.pem
+      - /etc/letsencrypt/live/second.smart-watering.xyz/privkey.pem:/etc/ssl/private/second/privkey.pem
+    depends_on:
+      - first-instance-db
+      - second-instance-db
+      - neptune-first-instance
+      - neptune-second-instance
+    networks:
+      - local_net
+    restart: unless-stopped
+    command: ["/bin/sh"]
+
+volumes:
+  postgres-data: {}
+  tenant-db-data: {}
+  pgadmin-data: {}
+
+networks:
+  local_net:
+    driver: bridge

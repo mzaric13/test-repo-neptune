@@ -1,0 +1,26 @@
+name: "Deployment Workflow"
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  pull-staging:
+    name: Pull Changes and recreate Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply changes
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_STAGING_HOST }}
+          port: 22
+          username: ${{ secrets.SSH_STAGING_USERNAME }}
+          key: ${{ secrets.SSH_STAGING_PRIVATE_KEY }}
+          script: |
+            set -e
+            docker logout
+            echo ${{secrets.DOCKERHUB_KEY}} | docker login --username ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+            docker compose -f docker-compose.yml down || exit 1
+            docker compose -f docker-compose.yml pull || exit 1
+            docker compose -f docker-compose.yml up --build -d --force-recreate || exit 1
+            docker logout
