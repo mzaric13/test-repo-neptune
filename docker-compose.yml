@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: Planet9
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
       test: 'pg_isready -U postgres'
@@ -27,6 +28,7 @@ services:
       POSTGRES_DB: Planet9
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
       test: 'pg_isready -U postgres'
