@@ -40,8 +40,8 @@ services:
     container_name: neptune-first-instance
     environment:
       PORT: 9101
-    depends_on:
-      - first-instance-db
+    # depends_on:
+    #   - first-instance-db
     deploy:
       resources:
         limits:
@@ -54,8 +54,8 @@ services:
     container_name: neptune-second-instance
     environment:
       PORT: 9100
-    depends_on:
-      - second-instance-db
+    # depends_on:
+    #   - second-instance-db
     deploy:
       resources:
         limits:
