@@ -3,10 +3,8 @@ services:
     image: postgres:14.2-alpine
     container_name: first-instance-db
     ports:
-      - 5431:5431
+      - 5431:5432
     environment:
-      PGUSER: postgres
-      PGPORT: 5431
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: planet9
@@ -14,7 +12,7 @@ services:
       - first-instance-db-data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: 'exit 0'
+      test: 'pg_isready -U postgres'
     networks:
       - local_net
 
@@ -24,15 +22,14 @@ services:
     ports:
       - 5432:5432
     environment:
-      PGUSER: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: second-instance-db
+      POSTGRES_DB: planet9
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: 'exit 0'
+      test: 'pg_isready -U postgres'
     networks:
       - local_net
 
@@ -42,13 +39,12 @@ services:
     environment:
       DB_TYPE: postgresql
       DB_PSQL_HOST: first-instance-db
-      DB_PSQL_PORT: 5431
+      DB_PSQL_PORT: 5432
       DB_PSQL_USER: postgres
       DB_PSQL_PASSWORD: postgres
       PORT: 9101
     depends_on:
-      first-instance-db:
-        condition: service_started
+      - first-instance-db
     networks:
       - local_net
 
@@ -63,8 +59,7 @@ services:
       DB_PSQL_PASSWORD: postgres
       PORT: 9100
     depends_on:
-      second-instance-db:
-        condition: service_started
+      - second-instance-db
     networks:
       - local_net
 
@@ -88,7 +83,7 @@ services:
     networks:
       - local_net
     restart: unless-stopped
-    command: ["/bin/sh"]
+    command: ["nginx", "-g", "daemon off;"]
 
 volumes:
   second-instance-db-data: {}
