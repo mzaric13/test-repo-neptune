@@ -13,7 +13,10 @@ services:
       - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
-      test: 'pg_isready -U postgres'
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - local_net
 
@@ -31,14 +34,15 @@ services:
       - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
-      test: 'pg_isready -U postgres'
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     networks:
       - local_net
 
   neptune-first-instance:
-    build:
-      context: .
-      dockerfile: Dockerfile.neptune
+    image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-first-instance
     environment:
       DB_TYPE: postgresql
@@ -49,19 +53,17 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9101
     depends_on:
-      - first-instance-db
+      first-instance-db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 1.5G
     networks:
       - local_net
-    command: ["first-instance-db:5432", "--", "neptune", "start"]
 
   neptune-second-instance:
-    build:
-      context: .
-      dockerfile: Dockerfile.neptune
+    image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-second-instance
     environment:
       DB_TYPE: postgresql
@@ -72,14 +74,14 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9100
     depends_on:
-      - second-instance-db
+      second-instance-db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
           memory: 1.5G
     networks:
       - local_net
-    command: ["second-instance-db:5432", "--", "neptune", "start"]
 
   nginx:
     image: nginx:alpine
