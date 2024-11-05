@@ -11,18 +11,13 @@ services:
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
-      # - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
+      - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-W", "postgres"]
+      test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\dn' | grep -q 'planet9'"]
       interval: 10s
       timeout: 5s
       retries: 5
-    # healthcheck:
-    #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     networks:
       - local_net
 
@@ -38,18 +33,13 @@ services:
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
-      # - ./check-schema-second.sh:/check-schema-second.sh  
+      - ./check-schema-second.sh:/check-schema-second.sh  
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres", "-W", "postgres"]
+      test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\dn' | grep -q 'planet9'"]
       interval: 10s
       timeout: 5s
       retries: 5
-    # healthcheck:
-    #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     networks:
       - local_net
 
