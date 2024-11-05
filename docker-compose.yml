@@ -1,6 +1,7 @@
 services:
   first-instance-db:
     container_name: first-instance-db
+    image: first-instance-db
     build:
       context: .
       dockerfile: Dockerfile.first  # Specify your Dockerfile
@@ -23,6 +24,7 @@ services:
 
   second-instance-db:
     container_name: second-instance-db
+    image: second-instance-db
     build:
       context: .
       dockerfile: Dockerfile.second  # Specify your Dockerfile
