@@ -10,6 +10,7 @@ services:
       POSTGRES_DB: planet9
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "/check-schema.sh"]  # Use the custom check script
@@ -32,6 +33,7 @@ services:
       POSTGRES_DB: planet9
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "/check-schema.sh"]  # Use the custom check script
