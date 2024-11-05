@@ -54,6 +54,8 @@ services:
           memory: 1.5G
     networks:
       - local_net
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
     entrypoint: ["./wait-for-it.sh", "firts-instance-db:5432", "--", "neptune", "start"]
 
   neptune-second-instance:
@@ -75,6 +77,8 @@ services:
           memory: 1.5G
     networks:
       - local_net
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
     entrypoint: ["./wait-for-it.sh", "second-instance-db:5432", "--", "neptune", "start"]
 
   nginx:
