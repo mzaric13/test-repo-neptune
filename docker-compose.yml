@@ -11,13 +11,13 @@ services:
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
-      - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
+      # - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
     restart: unless-stopped
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
     networks:
       - local_net
 
@@ -32,14 +32,14 @@ services:
       POSTGRES_DB: planet9
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
-      - ./check-schema-second.sh:/check-schema-second.sh  # Ensure this path is correct
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
+      # - ./check-schema-second.sh:/check-schema-second.sh  
     restart: unless-stopped
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck:
+    #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
     networks:
       - local_net
 
@@ -97,8 +97,9 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9101
     depends_on:
-      first-instance-db:
-        condition: service_healthy
+      - first-instance-db
+      # first-instance-db:
+      #   condition: service_healthy
     deploy:
       resources:
         limits:
@@ -118,8 +119,9 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9100
     depends_on:
-      second-instance-db:
-        condition: service_healthy
+      - second-instance-db
+      # second-instance-db:
+      #   condition: service_healthy
     deploy:
       resources:
         limits:

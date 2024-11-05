@@ -9,4 +9,4 @@ COPY check-schema-first.sh /check-schema-first.sh
 RUN chmod +x /check-schema-first.sh
 
 # Optionally add an entrypoint to run the check script after the database initialization
-CMD ["/bin/sh", "-c", "/check-schema-second.sh && docker-entrypoint.sh postgres"]
+CMD ["/bin/sh", "-c", "/check-schema-first.sh && docker-entrypoint.sh postgres"]
