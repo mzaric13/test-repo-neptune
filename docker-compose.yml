@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: planet9
     volumes:
-      - first-instance-db-data:/var/lib/postgresql/data
+      - second-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
       - ./check-schema-second.sh:/check-schema-second.sh
     restart: always
