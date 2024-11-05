@@ -1,9 +1,9 @@
 services:
   first-instance-db:
+    container_name: first-instance-db
     build:
       context: .
       dockerfile: Dockerfile.first  # Specify your Dockerfile
-    container_name: first-instance-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -22,10 +22,10 @@ services:
       - local_net
 
   second-instance-db:
+    container_name: second-instance-db
     build:
       context: .
       dockerfile: Dockerfile.second  # Specify your Dockerfile
-    container_name: second-instance-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
