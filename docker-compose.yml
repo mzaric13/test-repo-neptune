@@ -1,8 +1,6 @@
 services:
   first-instance-db:
-    build: 
-      context: . 
-      dockerfile: Dockerfile 
+    image: postgres:14.2-alpine
     container_name: first-instance-db
     environment:
       POSTGRES_USER: postgres
@@ -11,9 +9,9 @@ services:
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped
+    restart: always
     healthcheck:
-      test: ["CMD", "/check-schema.sh"]  # Use the custom check script
+      test: ["CMD", "/check-schema.sh"] 
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,9 +19,7 @@ services:
       - local_net
 
   second-instance-db:
-    build: 
-      context: . 
-      dockerfile: Dockerfile 
+    image: postgres:14.2-alpine
     container_name: second-instance-db
     ports:
       - 5432:5432
@@ -34,9 +30,9 @@ services:
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    restart: unless-stopped
+    restart: always
     healthcheck:
-      test: ["CMD", "/check-schema.sh"]  # Use the custom check script
+      test: ["CMD", "/check-schema.sh"]
       interval: 10s
       timeout: 5s
       retries: 5
