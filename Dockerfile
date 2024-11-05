@@ -1,10 +1,9 @@
-FROM neptunesoftware/planet9:v23.10.7
+# Dockerfile
+FROM postgres:14.2-alpine
 
-# Copy wait-for-it.sh into the container
-COPY wait-for-it.sh /wait-for-it.sh
+# Copy initialization script and health check script
+COPY init-schema.sql /docker-entrypoint-initdb.d/
+COPY check-schema.sh /check-schema.sh
 
-# Make sure the script is executable
-RUN chmod +x /wait-for-it.sh
-
-# Set default entrypoint to wait-for-it
-ENTRYPOINT ["/wait-for-it.sh"]
+# Make health check script executable
+RUN chmod +x /check-schema.sh
