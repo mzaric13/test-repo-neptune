@@ -1,3 +1,6 @@
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" -d "$POSTGRES_DB"  <<-EOSQL
-     create schema if not exists "planet9";
-EOSQL
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_namespace WHERE nspname = 'planet9') THEN
+        CREATE SCHEMA "planet9";
+    END IF;
+END $$;
