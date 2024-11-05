@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export PGPASSWORD="postgres"
 
 # Function to check if the specified database exists
@@ -11,19 +13,19 @@ check_schema_exists() {
 }
 
 # List of databases to check
-databases=("first-database" "second-database" "third-database")  # Add your databases here
+databases=("first-database" "second-database" "third-database")
 
 # Check if each database and its schema exist
 for db in "${databases[@]}"; do
   # Wait for the database to be created
-  until check_database_exists "first-instance-db" "$db"; do
+  until check_database_exists "localhost" "$db"; do
     echo "Waiting for database '$db' to be created..."
     sleep 2
   done
   echo "Database '$db' is ready!"
 
   # Wait for the schema 'planet9' to be created in the database
-  until check_schema_exists "first-instance-db" "$db"; do
+  until check_schema_exists "localhost" "$db"; do
     echo "Waiting for schema 'planet9' in database '$db' to be created..."
     sleep 2
   done
