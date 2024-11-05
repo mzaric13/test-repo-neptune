@@ -2,7 +2,7 @@ name: "Deployment Workflow"
 on:
   push:
     branches:
-      - 'stg'
+      - 'main'
 
 jobs:
   prepare-staging:

@@ -1,67 +1,81 @@
 services:
-  # first-instance-db:
-  #   image: postgres:14.2-alpine
-  #   container_name: first-instance-db
-  #   ports:
-  #     - 5431:5432
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: Planet9
-  #   volumes:
-  #     - first-instance-db-data:/var/lib/postgresql/data
-  #     - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: 'pg_isready -U postgres'
-  #   networks:
-  #     - local_net
+  first-instance-db:
+    image: postgres:14.2-alpine
+    container_name: first-instance-db
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: planet9
+    volumes:
+      - first-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+    restart: unless-stopped
+    healthcheck:
+      test: 'pg_isready -U postgres'
+    networks:
+      - local_net
 
-  # second-instance-db:
-  #   image: postgres:14.2-alpine
-  #   container_name: second-instance-db
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: Planet9
-  #   volumes:
-  #     - second-instance-db-data:/var/lib/postgresql/data
-  #     - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: 'pg_isready -U postgres'
-  #   networks:
-  #     - local_net
+  second-instance-db:
+    image: postgres:14.2-alpine
+    container_name: second-instance-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: planet9
+    volumes:
+      - second-instance-db-data:/var/lib/postgresql/data
+      - ./init-schema.sql:/docker-entrypoint-initdb.d/init-schema.sql
+    restart: unless-stopped
+    healthcheck:
+      test: 'pg_isready -U postgres'
+    networks:
+      - local_net
 
   neptune-first-instance:
     image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-first-instance
     environment:
+      DB_TYPE: postgresql
+      DB_PSQL_HOST: first-instance-db
+      DB_PSQL_PORT: 5432
+      DB_PSQL_USER: postgres
+      DB_PSQL_PASSWORD: postgres
+      DB_PSQL_DBNAME: planet9
       PORT: 9101
-    # depends_on:
-    #   - first-instance-db
+    depends_on:
+      - first-instance-db
     deploy:
       resources:
         limits:
           memory: 1.5G
     networks:
       - local_net
+    entrypoint: ["./wait-for-it.sh", "firts-instance-db:5432", "--", "neptune", "start"]
 
   neptune-second-instance:
     image: neptunesoftware/planet9:v23.10.7
     container_name: neptune-second-instance
     environment:
+      DB_TYPE: postgresql
+      DB_PSQL_HOST: second-instance-db
+      DB_PSQL_PORT: 5432
+      DB_PSQL_USER: postgres
+      DB_PSQL_PASSWORD: postgres
+      DB_PSQL_DBNAME: planet9
       PORT: 9100
-    # depends_on:
-    #   - second-instance-db
+    depends_on:
+      - second-instance-db
     deploy:
       resources:
         limits:
           memory: 1.5G
     networks:
       - local_net
+    entrypoint: ["./wait-for-it.sh", "second-instance-db:5432", "--", "neptune", "start"]
 
   nginx:
     image: nginx:alpine
@@ -76,8 +90,8 @@ services:
       - /etc/letsencrypt/live/second.smart-watering.xyz/fullchain.pem:/etc/ssl/certs/second/fullchain.pem
       - /etc/letsencrypt/live/second.smart-watering.xyz/privkey.pem:/etc/ssl/private/second/privkey.pem
     depends_on:
-      # - first-instance-db
-      # - second-instance-db
+      - first-instance-db
+      - second-instance-db
       - neptune-first-instance
       - neptune-second-instance
     networks:
@@ -85,9 +99,9 @@ services:
     restart: unless-stopped
     command: ["nginx", "-g", "daemon off;"]
 
-# volumes:
-#   second-instance-db-data: {}
-#   first-instance-db-data: {}
+volumes:
+  second-instance-db-data: {}
+  first-instance-db-data: {}
 
 networks:
   local_net:
