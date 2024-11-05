@@ -1,7 +1,6 @@
 services:
   first-instance-db:
     container_name: first-instance-db
-    image: first-instance-db
     build:
       context: .
       dockerfile: Dockerfile.first  # Specify your Dockerfile
@@ -14,6 +13,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
       # - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     # healthcheck:
     #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
     #   interval: 10s
@@ -24,7 +28,6 @@ services:
 
   second-instance-db:
     container_name: second-instance-db
-    image: second-instance-db
     build:
       context: .
       dockerfile: Dockerfile.second  # Specify your Dockerfile
@@ -37,6 +40,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
       # - ./check-schema-second.sh:/check-schema-second.sh  
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     # healthcheck:
     #   test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
     #   interval: 10s
@@ -99,9 +107,9 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9101
     depends_on:
-      - first-instance-db
-      # first-instance-db:
-      #   condition: service_healthy
+      # - first-instance-db
+      first-instance-db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -121,9 +129,9 @@ services:
       DB_PSQL_DBNAME: planet9
       PORT: 9100
     depends_on:
-      - second-instance-db
-      # second-instance-db:
-      #   condition: service_healthy
+      # - second-instance-db
+      second-instance-db:
+        condition: service_healthy
     deploy:
       resources:
         limits:
