@@ -3,10 +3,10 @@ FROM postgres:14.2-alpine
 
 # Copy initialization script and health check script
 COPY init.sql /docker-entrypoint-initdb.d/
-COPY check-schema-first.sh /check-schema-first.sh
+COPY check-schema-second.sh /check-schema-second.sh
 
 # Make health check script executable
-RUN chmod +x /check-schema-first.sh
+RUN chmod +x /check-schema-second.sh
 
 # Optionally add an entrypoint to run the check script after the database initialization
 CMD ["/bin/sh", "-c", "/check-schema-second.sh && docker-entrypoint.sh postgres"]

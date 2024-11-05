@@ -1,6 +1,8 @@
 services:
   first-instance-db:
-    image: postgres:14.2-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.first  # Specify your Dockerfile
     container_name: first-instance-db
     environment:
       POSTGRES_USER: postgres
@@ -8,11 +10,11 @@ services:
       POSTGRES_DB: planet9
     volumes:
       - first-instance-db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./check-schema-first.sh:/check-schema-first.sh
-    restart: always
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
+      - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/check-schema-first.sh"] 
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -20,26 +22,68 @@ services:
       - local_net
 
   second-instance-db:
-    image: postgres:14.2-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.second  # Specify your Dockerfile
     container_name: second-instance-db
-    ports:
-      - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: planet9
     volumes:
       - second-instance-db-data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./check-schema-second.sh:/check-schema-second.sh
-    restart: always
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
+      - ./check-schema-second.sh:/check-schema-second.sh  # Ensure this path is correct
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "/check-schema-second.sh"]
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d planet9']
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
       - local_net
+
+  # first-instance-db:
+  #   image: postgres:14.2-alpine
+  #   container_name: first-instance-db
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: planet9
+  #   volumes:
+  #     - first-instance-db-data:/var/lib/postgresql/data
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #     - ./check-schema-first.sh:/check-schema-first.sh
+  #   restart: always
+  #   healthcheck:
+  #     test: ["CMD", "/check-schema-first.sh"] 
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - local_net
+
+  # second-instance-db:
+  #   image: postgres:14.2-alpine
+  #   container_name: second-instance-db
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGRES_DB: planet9
+  #   volumes:
+  #     - second-instance-db-data:/var/lib/postgresql/data
+  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  #     - ./check-schema-second.sh:/check-schema-second.sh
+  #   restart: always
+  #   healthcheck:
+  #     test: ["CMD", "/check-schema-second.sh"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   networks:
+  #     - local_net
 
   neptune-first-instance:
     image: neptunesoftware/planet9:v23.10.7
