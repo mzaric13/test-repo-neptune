@@ -18,14 +18,14 @@ databases=("first-database" "second-database" "third-database")
 # Check if each database and its schema exist
 for db in "${databases[@]}"; do
   # Wait for the database to be created
-  until check_database_exists "localhost" "$db"; do
+  until check_database_exists "postgres-db" "$db"; do
     echo "Waiting for database '$db' to be created..."
     sleep 2
   done
   echo "Database '$db' is ready!"
 
   # Wait for the schema 'planet9' to be created in the database
-  until check_schema_exists "localhost" "$db"; do
+  until check_schema_exists "postgres-db" "$db"; do
     echo "Waiting for schema 'planet9' in database '$db' to be created..."
     sleep 2
   done
