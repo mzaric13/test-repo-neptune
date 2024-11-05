@@ -13,6 +13,11 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Ensure this path is correct
       - ./check-schema.sh:/check-schema.sh  # Ensure this path is correct
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/bin/sh", "/check-schema.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     # healthcheck:
     #   test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\\dn' | grep -q 'planet9'"]
     #   interval: 10s
