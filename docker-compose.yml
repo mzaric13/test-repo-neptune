@@ -14,7 +14,7 @@ services:
       - ./check-schema.sh:/check-schema.sh  # Ensure this path is correct
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "/bin/sh /check-schema.sh || exit 1" ]
+      test: [ "CMD-SHELL", "chmod +x /check-schema.sh && /bin/sh /check-schema.sh || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
