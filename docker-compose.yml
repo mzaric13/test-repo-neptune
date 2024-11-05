@@ -10,11 +10,11 @@ services:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
-    # healthcheck:
-    #   test: ["CMD", "/check-schema.sh"] 
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
+    healthcheck:
+      test: ["CMD", "/check-schema-first.sh"] 
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - local_net
 
@@ -31,11 +31,11 @@ services:
       - first-instance-db-data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: always
-    # healthcheck:
-    #   test: ["CMD", "/check-schema.sh"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
+    healthcheck:
+      test: ["CMD", "/check-schema-second.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - local_net
 
