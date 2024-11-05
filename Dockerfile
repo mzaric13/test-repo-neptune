@@ -8,10 +8,25 @@ COPY create_schemas.sql /docker-entrypoint-initdb.d/
 COPY check-schema.sh /check-schema.sh
 
 # Make health check script executable
+# RUN chmod +x /check-schema.sh
+
+# # Set the healthcheck to use the schema checking script
+# HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD /bin/sh /check-schema.sh || exit 1
+
+# # Start the postgres server
+# CMD ["docker-entrypoint.sh", "postgres"]
+
 RUN chmod +x /check-schema.sh
 
-# Set the healthcheck to use the schema checking script
-HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD /bin/sh /check-schema.sh || exit 1
+# Healthcheck with conditional waiting for database and schema
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD [
+  "bash", "-c",
+  "while ! psql -h postgres-db -U postgres -t -c 'SELECT 1'; do
+    echo 'Waiting for postgres to be ready...';
+    sleep 2;
+  done;
+  /check-schema.sh || exit 1"
+]
 
 # Start the postgres server
 CMD ["docker-entrypoint.sh", "postgres"]
