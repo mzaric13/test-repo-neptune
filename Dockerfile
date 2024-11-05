@@ -20,7 +20,7 @@ RUN chmod +x /check-schema.sh
 
 # Healthcheck with conditional waiting for database and schema
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD [
-  "bash", "-c",
+  "bin/sh", "-c",
   "while ! psql -h postgres-db -U postgres -t -c 'SELECT 1'; do
     echo 'Waiting for postgres to be ready...';
     sleep 2;
