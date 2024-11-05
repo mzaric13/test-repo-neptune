@@ -2,7 +2,7 @@ services:
   first-instance-db:
     build: 
       context: . 
-        dockerfile: Dockerfile 
+      dockerfile: Dockerfile 
     container_name: first-instance-db
     environment:
       POSTGRES_USER: postgres
@@ -22,7 +22,7 @@ services:
   second-instance-db:
     build: 
       context: . 
-        dockerfile: Dockerfile 
+      dockerfile: Dockerfile 
     container_name: second-instance-db
     ports:
       - 5432:5432
