@@ -8,5 +8,8 @@ COPY check-schema-first.sh /check-schema-first.sh
 # Make health check script executable
 RUN chmod +x /check-schema-first.sh
 
-# Optionally add an entrypoint to run the check script after the database initialization
-CMD ["/bin/sh", "-c", "/check-schema-first.sh && docker-entrypoint.sh postgres"]
+# Set the healthcheck to use the schema checking script
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD /check-schema-first.sh || exit 1
+
+# Start the postgres server
+CMD ["docker-entrypoint.sh", "postgres"]
