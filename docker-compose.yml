@@ -14,7 +14,7 @@ services:
       # - ./check-schema-first.sh:/check-schema-first.sh  # Ensure this path is correct
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-W", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,7 +41,7 @@ services:
       # - ./check-schema-second.sh:/check-schema-second.sh  
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "pg_isready", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "postgres", "-W", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
