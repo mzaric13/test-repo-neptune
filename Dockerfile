@@ -11,7 +11,7 @@ COPY check-schema.sh /check-schema.sh
 RUN chmod +x /check-schema.sh
 
 # Set the healthcheck to use the schema checking script
-HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD /check-schema.sh || exit 1
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD /bin/sh /check-schema.sh || exit 1
 
 # Start the postgres server
 CMD ["docker-entrypoint.sh", "postgres"]
