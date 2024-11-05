@@ -1,51 +1,47 @@
 services:
-  postgres-db:
-    container_name: postgres-db
+  first-instance-db:
+    container_name: first-instance-db
     build:
       context: .
-      dockerfile: Dockerfile  # Specify your Dockerfile
+      dockerfile: Dockerfile.first
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: planet9
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-      - ./check-schema.sh:/check-schema.sh  # Ensure this path is correct
+      - first-instance-db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
+      - ./check-schema-first.sh:/check-schema-first.sh
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "chmod +x /check-schema.sh && /bin/sh /check-schema.sh || exit 1" ]
+      test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\\dn' | grep -q 'planet9'"]
       interval: 10s
       timeout: 5s
       retries: 5
-    # healthcheck:
-    #   test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\\dn' | grep -q 'planet9'"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     networks:
       - local_net
 
-  # second-instance-db:
-  #   container_name: second-instance-db
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile.second  # Specify your Dockerfile
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGRES_DB: planet9
-  #   volumes:
-  #     - second-instance-db-data:/var/lib/postgresql/data
-  #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
-  #     - ./check-schema-second.sh:/check-schema-second.sh  
-  #   restart: unless-stopped
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\\dn' | grep -q 'planet9'"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   networks:
-  #     - local_net
+  second-instance-db:
+    container_name: second-instance-db
+    build:
+      context: .
+      dockerfile: Dockerfile.second  # Specify your Dockerfile
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: planet9
+    volumes:
+      - second-instance-db-data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  
+      - ./check-schema-second.sh:/check-schema-second.sh  
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U postgres -W postgres -d planet9 -c '\\dn' | grep -q 'planet9'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - local_net
 
   # first-instance-db:
   #   image: postgres:14.2-alpine
@@ -94,15 +90,15 @@ services:
     container_name: neptune-first-instance
     environment:
       DB_TYPE: postgresql
-      DB_PSQL_HOST: postgres-db
+      DB_PSQL_HOST: first-instance-db
       DB_PSQL_PORT: 5432
       DB_PSQL_USER: postgres
       DB_PSQL_PASSWORD: postgres
-      DB_PSQL_DBNAME: first-database
+      DB_PSQL_DBNAME: planet9
       PORT: 9101
     depends_on:
       # - first-instance-db
-      postgres-db:
+      first-instance-db:
         condition: service_healthy
     deploy:
       resources:
@@ -116,15 +112,15 @@ services:
     container_name: neptune-second-instance
     environment:
       DB_TYPE: postgresql
-      DB_PSQL_HOST: postgres-db
+      DB_PSQL_HOST: second-instance-db
       DB_PSQL_PORT: 5432
       DB_PSQL_USER: postgres
       DB_PSQL_PASSWORD: postgres
-      DB_PSQL_DBNAME: second-database
+      DB_PSQL_DBNAME: planet9
       PORT: 9100
     depends_on:
       # - second-instance-db
-      postgres-db:
+      second-instance-db:
         condition: service_healthy
     deploy:
       resources:
@@ -146,8 +142,8 @@ services:
       - /etc/letsencrypt/live/second.smart-watering.xyz/fullchain.pem:/etc/ssl/certs/second/fullchain.pem
       - /etc/letsencrypt/live/second.smart-watering.xyz/privkey.pem:/etc/ssl/private/second/privkey.pem
     depends_on:
-      - postgres-db
-      # - second-instance-db
+      - first-instance-db
+      - second-instance-db
       - neptune-first-instance
       - neptune-second-instance
     networks:
@@ -156,9 +152,8 @@ services:
     command: ["nginx", "-g", "daemon off;"]
 
 volumes:
-  # second-instance-db-data: {}
-  # first-instance-db-data: {}
-  postgres-data: {}
+  second-instance-db-data: {}
+  first-instance-db-data: {}
 
 networks:
   local_net:
